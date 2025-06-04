@@ -128,7 +128,7 @@ impl MockStore {
             return Err(AppError::BlockNotFound(height.to_string()));
         }
 
-        let proof_path = format!("data/proofs/{}.json", height);
+        let proof_path = format!("data/proofs/{height}.json");
         if !Path::new(&proof_path).exists() {
             return Err(AppError::ProofNotFound(height.to_string()));
         }

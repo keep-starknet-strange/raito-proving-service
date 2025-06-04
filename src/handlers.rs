@@ -59,7 +59,7 @@ pub async fn get_blocks(
 ) -> Result<Json<BlocksResponse>> {
     query
         .validate()
-        .map_err(|e| AppError::InvalidQueryParameter(format!("Validation failed: {}", e)))?;
+        .map_err(|e| AppError::InvalidQueryParameter(format!("Validation failed: {e}")))?;
 
     let limit = query.limit.unwrap_or(20);
     let response = db.get_blocks(limit, query.cursor).await?;
@@ -118,7 +118,7 @@ pub async fn get_block_proof(
     }
 
     // Load proof file from filesystem
-    let proof_path = format!("data/proofs/{}.json", height);
+    let proof_path = format!("data/proofs/{height}.json");
     let proof_data =
         std::fs::read(&proof_path).map_err(|_| AppError::ProofNotFound(height.to_string()))?;
 
@@ -127,7 +127,7 @@ pub async fn get_block_proof(
         .header(header::CONTENT_TYPE, "application/json")
         .header(
             header::CONTENT_DISPOSITION,
-            format!("attachment; filename=\"block_{}_proof.json\"", height),
+            format!("attachment; filename=\"block_{height}_proof.json\""),
         )
         .header(header::CONTENT_LENGTH, proof_data.len())
         .body(proof_data.into())
@@ -157,8 +157,7 @@ pub async fn get_transaction_status(
 
     if !txid.chars().all(|c| c.is_ascii_hexdigit()) {
         return Err(AppError::InvalidTransactionId(format!(
-            "Contains non-hex characters: {}",
-            txid
+            "Contains non-hex characters: {txid}"
         )));
     }
 

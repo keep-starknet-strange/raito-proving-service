@@ -162,7 +162,7 @@ impl Database {
         }
 
         // Insert proof file record if it exists
-        let proof_path = format!("data/proofs/{}.json", height);
+        let proof_path = format!("data/proofs/{height}.json");
         if Path::new(&proof_path).exists() {
             sqlx::query!(
                 r#"
@@ -279,7 +279,7 @@ impl Database {
             merkle_root: block_row.merkle_root,
             bits: block_row.bits as u32,
             nonce: block_row.nonce as u32,
-            proof_url: format!("/v1/blocks/{}/proof", height),
+            proof_url: format!("/v1/blocks/{height}/proof"),
             txids,
         })
     }
