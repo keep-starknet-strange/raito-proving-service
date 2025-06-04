@@ -37,7 +37,7 @@ echo "..."
 
 # Test 5: Transaction Status
 echo -e "\n\n${GREEN}5. Transaction Status${NC}"
-curl -s "$BASE_URL/v1/tx/a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890" | jq '.'
+curl -s "$BASE_URL/v1/tx/a1b2c3d4e5f67890123456789012345678901234567890123456789012345678" | jq '.'
 
 # Test 6: Header Status  
 echo -e "\n${GREEN}6. Header Status${NC}"

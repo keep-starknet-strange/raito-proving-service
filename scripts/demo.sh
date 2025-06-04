@@ -189,8 +189,8 @@ test_transactions() {
     print_section "💰 TRANSACTION VERIFICATION"
     
     # Test valid transaction from mock data
-    print_endpoint "GET /v1/tx/a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890" "Check transaction inclusion (valid tx from block 869123)"
-    response=$(curl -s "$BASE_URL/v1/tx/a1b2c3d4e5f6789012345678901234567890123456789012345678901234567890")
+    print_endpoint "GET /v1/tx/a1b2c3d4e5f67890123456789012345678901234567890123456789012345678" "Check transaction inclusion (valid tx from block 869123)"
+    response=$(curl -s "$BASE_URL/v1/tx/a1b2c3d4e5f67890123456789012345678901234567890123456789012345678")
     print_response "$response"
     
     # Test non-existent transaction
