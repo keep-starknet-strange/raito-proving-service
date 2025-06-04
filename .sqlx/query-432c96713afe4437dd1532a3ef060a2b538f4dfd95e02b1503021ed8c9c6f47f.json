@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n            INSERT OR REPLACE INTO blocks \n            (height, hash, prev_hash, merkle_root, bits, nonce, tx_count, total_fees, timestamp, verified)\n            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n            ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 10
+    },
+    "nullable": []
+  },
+  "hash": "432c96713afe4437dd1532a3ef060a2b538f4dfd95e02b1503021ed8c9c6f47f"
+}

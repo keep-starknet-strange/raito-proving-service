@@ -1,0 +1,20 @@
+{
+  "db_name": "SQLite",
+  "query": "SELECT block_height FROM block_headers WHERE hash = ?",
+  "describe": {
+    "columns": [
+      {
+        "name": "block_height",
+        "ordinal": 0,
+        "type_info": "Int64"
+      }
+    ],
+    "parameters": {
+      "Right": 1
+    },
+    "nullable": [
+      false
+    ]
+  },
+  "hash": "e91f0ac0610efe61f098be39eaf993a44aeea93113d5aabab9a971a2ad240677"
+}

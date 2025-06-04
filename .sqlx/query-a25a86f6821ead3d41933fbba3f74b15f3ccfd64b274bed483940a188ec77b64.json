@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                INSERT OR REPLACE INTO proof_files \n                (block_height, file_path, proof_version, generated_at, execution_time_ms)\n                VALUES (?, ?, 'v1.0', ?, 45000)\n                ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "a25a86f6821ead3d41933fbba3f74b15f3ccfd64b274bed483940a188ec77b64"
+}

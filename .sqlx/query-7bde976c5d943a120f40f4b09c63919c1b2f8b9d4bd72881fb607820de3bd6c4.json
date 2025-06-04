@@ -1,0 +1,50 @@
+{
+  "db_name": "SQLite",
+  "query": "\n                SELECT height as \"height: u32\", hash, tx_count as \"tx_count: u32\", \n                       total_fees, timestamp, verified as \"verified: bool\"\n                FROM blocks \n                WHERE height < ?\n                ORDER BY height DESC \n                LIMIT ?\n                ",
+  "describe": {
+    "columns": [
+      {
+        "name": "height: u32",
+        "ordinal": 0,
+        "type_info": "Int64"
+      },
+      {
+        "name": "hash",
+        "ordinal": 1,
+        "type_info": "Text"
+      },
+      {
+        "name": "tx_count: u32",
+        "ordinal": 2,
+        "type_info": "Int64"
+      },
+      {
+        "name": "total_fees",
+        "ordinal": 3,
+        "type_info": "Float"
+      },
+      {
+        "name": "timestamp",
+        "ordinal": 4,
+        "type_info": "Int64"
+      },
+      {
+        "name": "verified: bool",
+        "ordinal": 5,
+        "type_info": "Bool"
+      }
+    ],
+    "parameters": {
+      "Right": 2
+    },
+    "nullable": [
+      false,
+      false,
+      false,
+      false,
+      false,
+      false
+    ]
+  },
+  "hash": "7bde976c5d943a120f40f4b09c63919c1b2f8b9d4bd72881fb607820de3bd6c4"
+}

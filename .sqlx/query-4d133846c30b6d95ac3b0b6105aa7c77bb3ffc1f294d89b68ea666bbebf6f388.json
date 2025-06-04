@@ -1,0 +1,12 @@
+{
+  "db_name": "SQLite",
+  "query": "INSERT OR REPLACE INTO transactions (txid, block_height, position_in_block) VALUES (?, ?, ?)",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Right": 3
+    },
+    "nullable": []
+  },
+  "hash": "4d133846c30b6d95ac3b0b6105aa7c77bb3ffc1f294d89b68ea666bbebf6f388"
+}
