@@ -86,13 +86,15 @@ jobs:
       - name: Install sqlx-cli
         run: cargo install sqlx-cli --no-default-features --features sqlite,rustls
 
+      - name: Setup in-memory database for SQLx query check
+        env:
+          DATABASE_URL: "sqlite::memory:" # Target in-memory DB for setup
+        run: cargo sqlx database setup # This will run migrations on the in-memory DB
+
       - name: Check SQLx query cache against in-memory DB
         env:
           DATABASE_URL: "sqlite::memory:" # Use in-memory SQLite for this check
-        run: |
-          # Ensure migrations can run on an empty in-memory DB for sqlx prepare validation
-          # This command effectively creates the schema in memory for the next step.
-          cargo sqlx prepare --check -- --workspace
+        run: cargo sqlx prepare --check -- --workspace # Now this should find the tables
 
       - name: Generate coverage report
         env:
