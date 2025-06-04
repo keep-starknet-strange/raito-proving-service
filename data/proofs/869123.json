@@ -1,0 +1,37 @@
+{
+  "block_height": 869123,
+  "block_hash": "0000000000000000000264e1b06b0f6f8b0c7e9e5b8b8f9c9d8b7a6f5e4d3c2b1a",
+  "proof_version": "v1.0",
+  "stark_proof": {
+    "trace": {
+      "main": [
+        "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef",
+        "0x234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12",
+        "0x34567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef123"
+      ],
+      "auxiliary": [
+        "0x4567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1234",
+        "0x567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef12345"
+      ]
+    },
+    "public_inputs": {
+      "block_hash": "0000000000000000000264e1b06b0f6f8b0c7e9e5b8b8f9c9d8b7a6f5e4d3c2b1a",
+      "prev_state_root": "0x89abcdef123456789abcdef123456789abcdef123456789abcdef123456789abc",
+      "new_state_root": "0x9abcdef123456789abcdef123456789abcdef123456789abcdef123456789abcd"
+    }
+  },
+  "verification_key": {
+    "domain_size": 1048576,
+    "num_queries": 18,
+    "fri_parameters": {
+      "log_blowup_factor": 1,
+      "num_fri_steps": 4,
+      "expansion_factor": 16
+    }
+  },
+  "metadata": {
+    "prover_version": "raito-v0.1.0",
+    "proof_generation_time": 1704067800,
+    "execution_time_ms": 45678
+  }
+} 

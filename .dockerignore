@@ -1,0 +1,45 @@
+# Git
+.git
+.gitignore
+
+# Documentation
+README.md
+docs/
+*.md
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Rust
+target/
+**/*.rs.bk
+*.pdb
+
+# CI/CD
+.github/
+.circleci/
+
+# Docker
+Dockerfile*
+.dockerignore
+
+# Tests
+tests/
+coverage/
+lcov.info
+
+# Dependencies
+node_modules/
+
+# Temporary files
+tmp/
+temp/
+*.log
+*.tmp 
