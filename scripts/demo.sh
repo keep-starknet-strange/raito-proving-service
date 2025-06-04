@@ -223,37 +223,6 @@ test_headers() {
     print_response "$response"
 }
 
-test_performance() {
-    print_section "⚡ PERFORMANCE TEST"
-    
-    echo -e "${YELLOW}Running concurrent requests test...${NC}"
-    
-    # Create a temporary file for results
-    temp_file=$(mktemp)
-    
-    # Run 10 concurrent health checks
-    for i in {1..10}; do
-        (
-            start_time=$(date +%s.%3N)
-            curl -s "$BASE_URL/healthz" > /dev/null
-            end_time=$(date +%s.%3N)
-            duration=$(echo "$end_time - $start_time" | bc -l)
-            echo "Request $i: ${duration}s" >> "$temp_file"
-        ) &
-    done
-    
-    wait
-    
-    echo -e "${CYAN}Concurrent request results:${NC}"
-    cat "$temp_file"
-    
-    # Calculate average
-    avg_time=$(awk '{sum += $3; gsub(/s/, "", $3)} END {print sum/NR "s"}' "$temp_file")
-    echo -e "${GREEN}Average response time: $avg_time${NC}"
-    
-    rm "$temp_file"
-}
-
 show_summary() {
     print_section "📊 DEMO SUMMARY"
     
@@ -286,7 +255,7 @@ show_summary() {
     echo -e "  • Implement authentication and rate limiting"
     echo -e "  • Deploy to production with monitoring"
     echo
-    echo -e "${PURPLE}🎉 Raito Proving Service MVP is production-ready!${NC}"
+    echo -e "${PURPLE}🎉 Raito Proving Service Mocked MVP is ready!${NC}"
 }
 
 # Trap to ensure service is stopped on exit
@@ -315,7 +284,6 @@ main() {
     test_proofs
     test_transactions
     test_headers
-    test_performance
     
     show_summary
     
