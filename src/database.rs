@@ -263,7 +263,7 @@ impl Database {
         .await
         .map_err(|e| AppError::Store(anyhow::anyhow!("Failed to fetch transactions: {}", e)))?
         .into_iter()
-        .filter_map(|txid| txid)
+        .flatten()
         .collect();
 
         Ok(BlockDetail {
