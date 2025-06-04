@@ -21,7 +21,7 @@ pub struct DatabaseConfig {
 impl Default for DatabaseConfig {
     fn default() -> Self {
         Self {
-            database_url: "sqlite:data/raito.db".to_string(),
+            database_url: "sqlite:raito_data/raito.db".to_string(),
             max_connections: 10,
             run_migrations: true,
         }
@@ -32,7 +32,7 @@ impl DatabaseConfig {
     pub fn from_env() -> Self {
         Self {
             database_url: std::env::var("DATABASE_URL")
-                .unwrap_or_else(|_| "sqlite:data/raito.db".to_string()),
+                .unwrap_or_else(|_| "sqlite:raito_data/raito.db".to_string()),
             max_connections: std::env::var("DATABASE_MAX_CONNECTIONS")
                 .unwrap_or_else(|_| "10".to_string())
                 .parse()

@@ -53,5 +53,5 @@ lcov.info
 
 /target
 .cursor
-data
+raito_data
 .sqlx
