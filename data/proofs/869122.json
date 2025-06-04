@@ -1,6 +1,6 @@
 {
   "block_height": 869122,
-  "block_hash": "0000000000000000000264e1b06b0f6f8b0c7e9e5b8b8f9c9d8b7a6f5e4d3c2b1b",
+  "block_hash": "000000000000000000264e1b06b0f6f8b0c7e9e5b8b8f9c9d8b7a6f5e4d3c2b1b",
   "proof_version": "v1.0",
   "stark_proof": {
     "trace": {
@@ -15,7 +15,7 @@
       ]
     },
     "public_inputs": {
-      "block_hash": "0000000000000000000264e1b06b0f6f8b0c7e9e5b8b8f9c9d8b7a6f5e4d3c2b1b",
+      "block_hash": "000000000000000000264e1b06b0f6f8b0c7e9e5b8b8f9c9d8b7a6f5e4d3c2b1b",
       "prev_state_root": "0x78abcdef123456789abcdef123456789abcdef123456789abcdef123456789abc",
       "new_state_root": "0x89abcdef123456789abcdef123456789abcdef123456789abcdef123456789abc"
     }
