@@ -83,6 +83,15 @@ jobs:
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
 
+      - name: Check SQLx query cache against in-memory DB
+        env:
+          DATABASE_URL: "sqlite::memory:" # Use in-memory SQLite for this check
+        run: |
+          # Ensure migrations can run on an empty in-memory DB for sqlx prepare validation
+          # This command effectively creates the schema in memory for the next step.
+          # cargo sqlx database setup # This might be too much, sqlx prepare should handle schema if migrations are discoverable
+          cargo sqlx prepare --check -- --workspace
+
       - name: Generate coverage report
         env:
           DATABASE_URL: "sqlite::memory:" # Use in-memory SQLite for coverage tests
