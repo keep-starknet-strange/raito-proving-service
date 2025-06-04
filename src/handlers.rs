@@ -1,15 +1,16 @@
 use crate::{
+    database::Database,
     error::{AppError, Result},
     model::{BlocksQuery, BlocksResponse, HeaderStatus, HealthStatus, TransactionStatus},
-    store::MockStore,
 };
 use axum::{
-    extract::{Path, Query},
+    extract::{Path, Query, State},
     http::{header, StatusCode},
     response::{IntoResponse, Response},
     Json,
 };
 use chrono::Utc;
+use std::sync::Arc;
 use utoipa::OpenApi;
 use validator::Validate;
 
@@ -52,14 +53,16 @@ pub struct ApiDoc;
         (status = 400, description = "Invalid query parameters"),
     )
 )]
-pub async fn get_blocks(Query(query): Query<BlocksQuery>) -> Result<Json<BlocksResponse>> {
+pub async fn get_blocks(
+    State(db): State<Arc<Database>>,
+    Query(query): Query<BlocksQuery>,
+) -> Result<Json<BlocksResponse>> {
     query
         .validate()
         .map_err(|e| AppError::InvalidQueryParameter(format!("Validation failed: {}", e)))?;
 
     let limit = query.limit.unwrap_or(20);
-    let store = MockStore::global();
-    let response = store.get_blocks(limit, query.cursor);
+    let response = db.get_blocks(limit, query.cursor).await?;
 
     Ok(Json(response))
 }
@@ -74,23 +77,22 @@ pub async fn get_blocks(Query(query): Query<BlocksQuery>) -> Result<Json<BlocksR
     )
 )]
 pub async fn get_block_by_identifier(
+    State(db): State<Arc<Database>>,
     Path(identifier): Path<String>,
 ) -> Result<Json<crate::model::BlockDetail>> {
-    let store = MockStore::global();
-
     let block = if let Ok(height) = identifier.parse::<u32>() {
-        store.get_block_by_height(height)?
+        db.get_block_by_height(height).await?
     } else if identifier.len() == 64
         && identifier
             .chars()
             .all(|c| c.is_ascii_hexdigit() || c == '0')
     {
-        store.get_block_by_hash(&identifier)?
+        db.get_block_by_hash(&identifier).await?
     } else {
         return Err(AppError::InvalidBlockIdentifier(identifier));
     };
 
-    Ok(Json(block.clone()))
+    Ok(Json(block))
 }
 
 #[utoipa::path(
@@ -101,9 +103,24 @@ pub async fn get_block_by_identifier(
         (status = 404, description = "Block or proof not found"),
     )
 )]
-pub async fn get_block_proof(Path(height): Path<u32>) -> Result<Response> {
-    let store = MockStore::global();
-    let proof_data = store.get_proof_file(height)?;
+pub async fn get_block_proof(
+    State(db): State<Arc<Database>>,
+    Path(height): Path<u32>,
+) -> Result<Response> {
+    // Check if block exists
+    if !db.block_exists_by_identifier(&height.to_string()).await? {
+        return Err(AppError::BlockNotFound(height.to_string()));
+    }
+
+    // Check if proof file exists in database
+    if !db.proof_file_exists(height).await? {
+        return Err(AppError::ProofNotFound(height.to_string()));
+    }
+
+    // Load proof file from filesystem
+    let proof_path = format!("data/proofs/{}.json", height);
+    let proof_data =
+        std::fs::read(&proof_path).map_err(|_| AppError::ProofNotFound(height.to_string()))?;
 
     let response = Response::builder()
         .status(StatusCode::OK)
@@ -127,7 +144,10 @@ pub async fn get_block_proof(Path(height): Path<u32>) -> Result<Response> {
         (status = 400, description = "Invalid transaction ID"),
     )
 )]
-pub async fn get_transaction_status(Path(txid): Path<String>) -> Result<Json<TransactionStatus>> {
+pub async fn get_transaction_status(
+    State(db): State<Arc<Database>>,
+    Path(txid): Path<String>,
+) -> Result<Json<TransactionStatus>> {
     if txid.len() != 64 {
         return Err(AppError::InvalidTransactionId(format!(
             "Invalid length: {}, expected 64",
@@ -142,8 +162,7 @@ pub async fn get_transaction_status(Path(txid): Path<String>) -> Result<Json<Tra
         )));
     }
 
-    let store = MockStore::global();
-    let status = store.get_transaction_status(&txid)?;
+    let status = db.get_transaction_status(&txid).await?;
 
     Ok(Json(status))
 }
@@ -156,13 +175,15 @@ pub async fn get_transaction_status(Path(txid): Path<String>) -> Result<Json<Tra
         (status = 400, description = "Invalid header hash"),
     )
 )]
-pub async fn get_header_status(Path(hash): Path<String>) -> Result<Json<HeaderStatus>> {
+pub async fn get_header_status(
+    State(db): State<Arc<Database>>,
+    Path(hash): Path<String>,
+) -> Result<Json<HeaderStatus>> {
     if hash.len() != 64 || !hash.chars().all(|c| c.is_ascii_hexdigit() || c == '0') {
         return Err(AppError::InvalidHeaderHash(hash));
     }
 
-    let store = MockStore::global();
-    let status = store.get_header_status(&hash)?;
+    let status = db.get_header_status(&hash).await?;
 
     Ok(Json(status))
 }
@@ -174,11 +195,14 @@ pub async fn get_header_status(Path(hash): Path<String>) -> Result<Json<HeaderSt
         (status = 200, description = "Service is healthy", body = HealthStatus),
     )
 )]
-pub async fn health_check() -> Json<HealthStatus> {
-    Json(HealthStatus {
+pub async fn health_check(State(db): State<Arc<Database>>) -> Result<Json<HealthStatus>> {
+    // Perform database health check
+    db.health_check().await?;
+
+    Ok(Json(HealthStatus {
         status: "up".to_string(),
         timestamp: Utc::now().timestamp(),
-    })
+    }))
 }
 
 pub async fn metrics_handler() -> impl IntoResponse {

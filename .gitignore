@@ -20,8 +20,38 @@ target/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Database
+data/raito.db
+data/raito.db-wal
+data/raito.db-shm
+
+# Logs
+*.log
+
+# Test artifacts
+coverage/
+lcov.info
+
+# Documentation artifacts
+/docs/build/
 
 # Added by cargo
 
 /target
 .cursor
+data
+.sqlx
